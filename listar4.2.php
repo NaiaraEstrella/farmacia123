@@ -36,7 +36,7 @@ $listaMedicamentos = $sql->fetchAll(PDO::FETCH_ASSOC); // Codigo certo para cham
                
             </tbody>
         </table>
-        <a href="cadastrar_medicamento.php" class="btn btn-primary">Cadastrar Novo Medicamento</a>
+        <a href="cadastrar3.php" class="btn btn-primary">Cadastrar Novo Medicamento</a>
     </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Login - Farmácia Vida Saudável</title>
@@ -24,7 +24,7 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Entrar</button><br><br>
 
-            <a href="listar4.php" class="btn btn-default btn-lg active" role="button">Lista</a>
+            <a href="listar4.2.php" class="btn btn-default btn-lg active" role="button">Pular direto para a Lista</a>
 
         </form>
     </div>
