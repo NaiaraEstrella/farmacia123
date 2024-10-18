@@ -2,19 +2,25 @@
 require 'config1.php';
 
 // Definição de variáveis
-$busca = isset($_GET['busca']) ? $_GET['busca'] : '';
-$ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'nome';
+//$busca = isset($_GET['busca']) ? $_GET['busca'] : '';
+//$ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'nome';
 
 // refazer a conexao usando o pdo  e fazendo o select usando o PDO
 
 // Query para buscar medicamentos
-$sql = "SELECT * FROM medicamentos WHERE nome LIKE '%$busca%' ORDER BY $ordenar";
-$result = $conn->query($sql);
+//$sql = "SELECT * FROM medicamentos WHERE nome LIKE '%$busca%' ORDER BY $ordenar";
+
+$sql = $pdo ->query("SELECT * FROM medicamentos ");
+
+$listaMedicamentos = [];
+
+$listaMedicamentos = $sql->fetchAll(PDO::FETCH_ASSOC); // Codigo certo para chamar o SQL só não sei que a variavel esta correta
 
 // Verifique se a consulta foi bem-sucedida
-if (!$result) {
+/*if (!$result) {
     die("Erro na consulta: " . $conn->error);
-}
+}*/
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -26,21 +32,22 @@ if (!$result) {
 <body>
     <div class="container mt-5">
         <h2>Medicamentos Cadastrados</h2>
-        <form method="GET" class="row g-3 mb-3">
+       <!-- > <form method="GET" class="row g-3 mb-3">
             <div class="col-md-4">
                 <input type="text" class="form-control" name="busca" placeholder="Buscar por nome" value="<?php echo htmlspecialchars($busca); ?>">
             </div>
             <div class="col-md-4">
                 <select class="form-select" name="ordenar">
-                    <option value="nome" <?php if($ordenar == 'nome') echo 'selected'; ?>>Ordenar por Nome</option>
-                    <option value="categoria" <?php if($ordenar == 'categoria') echo 'selected'; ?>>Ordenar por Categoria</option>
-                    <option value="preco_venda" <?php if($ordenar == 'preco_venda') echo 'selected'; ?>>Ordenar por Preço de Venda</option>
+                    <option value="nome" <?php if($listaMedicamentos == 'nome') echo 'selected'; ?>>Ordenar por Nome</option>
+                    <option value="categoria" <?php if($listaMedicamentos == 'categoria') echo 'selected'; ?>>Ordenar por Categoria</option>
+                    <option value="preco_venda" <?php if($listaMedicamentos == 'preco_venda') echo 'selected'; ?>>Ordenar por Preço de Venda</option>
                 </select>
             </div>
             <div class="col-md-4">
                 <button type="submit" class="btn btn-primary w-100">Aplicar</button>
             </div>
-        </form>
+        </form> <!-->
+
         <table class="table table-striped table-responsive">
             <thead>
                 <tr>
@@ -53,7 +60,7 @@ if (!$result) {
                 </tr>
             </thead>
             <tbody>
-                <?php if($result->num_rows > 0): ?>
+                <?php if($result->num_rows > 0):  ?>
                     <?php while($med = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($med['nome']); ?></td>
