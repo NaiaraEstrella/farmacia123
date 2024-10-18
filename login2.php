@@ -22,7 +22,10 @@
                 <label for="senha" class="form-label">Senha</label>
                 <input type="password" class="form-control" id="senha" name="senha" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button><br><br>
+
+            <a href="listar4.php" class="btn btn-default btn-lg active" role="button">Lista</a>
+
         </form>
     </div>
 </body>
