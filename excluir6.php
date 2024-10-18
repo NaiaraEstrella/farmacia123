@@ -9,7 +9,7 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $sql = "DELETE FROM medicamentos WHERE id = $id";
 
 if ($conn->query($sql) === TRUE) {
-    header("Location: listar4.php");
+    header("Location: listar4.2.php");
 } else {
     echo "Erro ao deletar: " . $conn->error;
 }

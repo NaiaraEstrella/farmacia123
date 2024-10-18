@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Medicamento</title>
@@ -39,8 +39,17 @@
                     <option value="">Selecione uma categoria</option>
                     <option>Analgésico</option>
                     <option>Antibiotico</option>
-                    <option>Anti-viral</option>
+                    <option>Antivirais</option>
                     <option>Vitaminas</option>
+                    <option value="Antitérmicos"></option>
+                    <option value="Anti-inflamatórios"></option>
+                    <option value="Antialérgicos"></option>
+                    <option value="Vitaminas e Suplementos"></option>
+                    <option value="Antigripais"></option>
+                    <option value="Antifúngicos"></option>
+                    <option value="Higiene Pessoal"></option>
+                    <option value="Dermatologicos"></option>
+                    <option value="Primeiros Socorros"></option>
 
                  </select>
             </div>
@@ -49,7 +58,7 @@
                 <input type="date" class="form-control" id="data_validade" name="data_validade" required>
             </div>
             <button type="submit" class="btn btn-success">Cadastrar</button>
-            <a href="in.php" class="btn btn-primary">Ver Medicamentos</a>
+            <a href="listar4.2.php" class="btn btn-primary">Ver Medicamentos</a>
         </form>
     </div>
 </body>

@@ -22,5 +22,5 @@
 
     $sql->execute();
 
-    header("Location:listar4.php");
+    header("Location:listar4.2.php");
 ?>

@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Editar Medicamento</title>
@@ -90,6 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option <?php if($med['categoria'] == 'Analgésico') echo 'selected'; ?>>Analgésico</option>
                     <option <?php if($med['categoria'] == 'Antibiótico') echo 'selected'; ?>>Antibiótico</option>
                     <option <?php if($med['categoria'] == 'Anti-inflamatório') echo 'selected'; ?>>Anti-inflamatório</option>
+                    <option <?php if($med['categoria'] == 'Antivirais') echo 'selected'; ?>>Antivirais</option>
+                    <option <?php if($med['categoria'] == 'Antitérmicos') echo 'selected'; ?>>Antitérmicos</option>
+                    <option <?php if($med['categoria'] == 'Antialérgicos') echo 'selected'; ?>>Antialérgicos</option>
+                    <option <?php if($med['categoria'] == 'Vitaminas e Suplementos') echo 'selected'; ?>>Vitaminas e Suplementos</option>
+                    <option <?php if($med['categoria'] == 'Antigripais') echo 'selected'; ?>>Antigripais</option>
+                    <option <?php if($med['categoria'] == 'Antifúngicos') echo 'selected'; ?>>Antifúngicos</option>
+                    <option <?php if($med['categoria'] == 'Higiene Pessoal') echo 'selected'; ?>>Higiene Pessoal</option>
+                    <option <?php if($med['categoria'] == 'Dermatologicos') echo 'selected'; ?>>Dermatologicos</option>
+                    <option <?php if($med['categoria'] == 'Primeiros Socorros') echo 'selected'; ?>>Primeiros Socorros</option>
+                   <!-- <option <?php if($med['categoria'] == '') echo 'selected'; ?>></option> -->
                     <!-- Adicione mais categorias conforme necessário -->
                 </select>
             </div>
@@ -98,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="date" class="form-control" id="data_validade" name="data_validade" value="<?php echo $med['data_validade']; ?>" required>
             </div>
             <button type="submit" class="btn btn-success">Atualizar</button>
-            <a href="listar_medicamentos.php" class="btn btn-primary">Voltar</a>
+            <a href="listar4.2.php" class="btn btn-primary">Voltar</a>
         </form>
     </div>
 </body>
