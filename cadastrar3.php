@@ -23,7 +23,7 @@
             </div>
             <div class="mb-3">
                 <label for="preco_custo" class="form-label">Preço de Custo</label>
-                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" required>
+                <input type="number" step="" class="form-control" id="preco_custo" name="preco_custo" required>
             </div>
             <div class="mb-3">
                 <label for="preco_venda" class="form-label">Preço de Venda</label>
@@ -36,20 +36,21 @@
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria</label>
                 <select class="form-select" id="categoria" name="categoria" required>
-                    <option value="">Selecione uma categoria</option>
-                    <option>Analgésico</option>
-                    <option>Antibiotico</option>
-                    <option>Antivirais</option>
-                    <option>Vitaminas</option>
-                    <option value="Antitérmicos"></option>
-                    <option value="Anti-inflamatórios"></option>
-                    <option value="Antialérgicos"></option>
-                    <option value="Vitaminas e Suplementos"></option>
-                    <option value="Antigripais"></option>
-                    <option value="Antifúngicos"></option>
-                    <option value="Higiene Pessoal"></option>
-                    <option value="Dermatologicos"></option>
-                    <option value="Primeiros Socorros"></option>
+                    <option value="">Selecione uma categoria</option>                    
+                    <option value="Analgésico"></option>
+                    <option value="Antibiotico">Antibiotico</option>
+                    <option value="Antivirais">Antivirais</option>
+                    <option value="Antitérmicos">Antitérmicos</option>
+                    <option value="Anti-inflamatórios">Anti-inflamatórios</option>
+                    <option value="Antialérgicos">Antialérgicos</option>                    
+                    <option value="Antigripais">Antigripais</option>
+                    <option value="Antifúngicos">Antifúngicos</option>
+                    <option value="Higiene Pessoal">Higiene Pessoal</option>
+                    <option value="Dermatologicos">Dermatologicos</option>
+                    <option value="Primeiros Socorros">Primeiros Socorros</option>                    
+                    <option value="Vitaminas e Suplementos">Vitaminas e Suplementos</option>
+                    <option value="Antidepressivos">Antidepressivos</option>
+                    
 
                  </select>
             </div>

@@ -1,23 +1,17 @@
 <?php
-session_start();
+//session_start();
 require 'config1.php';
 
+//$stmt = $pdo->prepare($sql);
+//$med = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Obter o ID do medicamento
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Buscar informações do medicamento
-$sql = "SELECT * FROM medicamentos WHERE id = $id";
-$result = $conn->query($sql);
-
-if ($result->num_rows != 1) {
-    die("Medicamento não encontrado.");
-}
-
-$med = $result->fetch_assoc();
 
 // Verificar se o formulário foi enviado para atualizar
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Captura o ID do medicamento que você deseja atualizar
+    $id = $_POST['id']; //  garantir que o ID esteja sendo enviado no formulário
+
     $nome = $_POST['nome'];
     $preco_custo = $_POST['preco_custo'];
     $preco_venda = $_POST['preco_venda'];
@@ -25,17 +19,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $categoria = $_POST['categoria'];
     $data_validade = $_POST['data_validade'];
 
-    // Atualizar no banco de dados
+    // Atualizar no banco de dados usando consultas preparadas
     $sql = "UPDATE medicamentos SET 
-                nome='$nome', 
-                preco_custo='$preco_custo', 
-                preco_venda='$preco_venda', 
-                quantidade='$quantidade', 
-                categoria='$categoria', 
-                data_validade='$data_validade' 
-            WHERE id = $id";
+                nome = :nome, 
+                preco_custo = :preco_custo, 
+                preco_venda = :preco_venda, 
+                quantidade = :quantidade, 
+                categoria = :categoria, 
+                data_validade = :data_validade 
+            WHERE id = :id";
 
-    if ($conn->query($sql) === TRUE) {
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':preco_custo', $preco_custo);
+    $stmt->bindParam(':preco_venda', $preco_venda);
+    $stmt->bindParam(':quantidade', $quantidade);
+    $stmt->bindParam(':categoria', $categoria);
+    $stmt->bindParam(':data_validade', $data_validade);
+    $stmt->bindParam(':id', $id);
+
+    if ($stmt->execute()) {
         $sucesso = "Medicamento atualizado com sucesso!";
         // Atualizar as variáveis para exibir na página
         $med['nome'] = $nome;
@@ -45,9 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $med['categoria'] = $categoria;
         $med['data_validade'] = $data_validade;
     } else {
-        $erro = "Erro: " . $conn->error;
+        $erro = "Erro: " . $stmt->errorInfo()[2]; // Mostra o erro da execução da consulta
     }
 }
+
+// Buscar informações do medicamento
+$sql = "SELECT * FROM medicamentos";
+$listaMedicamentos = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -99,8 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option <?php if($med['categoria'] == 'Higiene Pessoal') echo 'selected'; ?>>Higiene Pessoal</option>
                     <option <?php if($med['categoria'] == 'Dermatologicos') echo 'selected'; ?>>Dermatologicos</option>
                     <option <?php if($med['categoria'] == 'Primeiros Socorros') echo 'selected'; ?>>Primeiros Socorros</option>
+                    <option <?php if($med['categoria'] == 'antidepressivos') echo 'selected'; ?>>Antidepressivos</option>
                    <!-- <option <?php if($med['categoria'] == '') echo 'selected'; ?>></option> -->
-                    <!-- Adicione mais categorias conforme necessário -->
+                    
                 </select>
             </div>
             <div class="mb-3">
