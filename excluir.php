@@ -1,16 +1,22 @@
 <?php
+require 'config.php';
 
-require 'config1.php';
-
-// Obter o ID do medicamento
+// Obter o ID do medicamento de forma segura
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Deletar o medicamento
-$sql = "DELETE FROM medicamentos WHERE id = $id";
-
-if ($conn->query($sql) === TRUE) {
-    header("Location: listar4.2.php");
+// Verificar se o ID é válido
+if ($id > 0) {
+    // Deletar o medicamento usando uma consulta preparada
+    $sql = "DELETE FROM medicamentos WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    
+    if ($stmt->execute([$id])) {
+        header("Location: listar1.php");
+        exit; // Adiciona exit após header para evitar execução adicional
+    } else {
+        echo "Erro ao deletar: " . htmlspecialchars($stmt->errorInfo()[2]);
+    }
 } else {
-    echo "Erro ao deletar: " . $conn->error;
+    echo "ID inválido.";
 }
 ?>
