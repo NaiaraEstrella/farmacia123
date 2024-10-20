@@ -1,9 +1,14 @@
 <?php
-require 'config1.php';
+require 'config.php';
 
 // Buscar informações do medicamento
 $sql = "SELECT * FROM medicamentos";
-$listaMedicamentos = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $listaMedicamentos = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Erro ao buscar medicamentos: " . htmlspecialchars($e->getMessage());
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,21 +35,27 @@ $listaMedicamentos = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($listaMedicamentos as $med): ?>
+                <?php if (empty($listaMedicamentos)): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($med['nome']); ?></td>
-                        <td><?php echo htmlspecialchars($med['preco_custo']); ?></td>
-                        <td><?php echo htmlspecialchars($med['preco_venda']); ?></td>
-                        <td><?php echo htmlspecialchars($med['quantidade']); ?></td>
-                        <td><?php echo htmlspecialchars($med['categoria']); ?></td>
-                        <td><?php echo htmlspecialchars($med['data_validade']); ?></td>
+                        <td colspan="6" class="text-center">Nenhum medicamento encontrado.</td>
                     </tr>
-                <?php endforeach; ?>
+                <?php else: ?>
+                    <?php foreach ($listaMedicamentos as $med): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($med['nome']); ?></td>
+                            <td><?php echo htmlspecialchars(number_format($med['preco_custo'], 2, ',', '.')); ?></td>
+                            <td><?php echo htmlspecialchars(number_format($med['preco_venda'], 2, ',', '.')); ?></td>
+                            <td><?php echo htmlspecialchars($med['quantidade']); ?></td>
+                            <td><?php echo htmlspecialchars($med['categoria']); ?></td>
+                            <td><?php echo htmlspecialchars($med['data_validade']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
 
         <!-- Botão para voltar ao menu -->
-        <a href="menu.php" class="btn btn-default btn-lg active" role="button">Ir para o menu</a><br><br>
+        <a href="menu.php" class="btn btn-secondary btn-lg active" role="button">Ir para o menu</a><br><br>
     </div>
 </body>
 </html>

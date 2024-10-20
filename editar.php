@@ -1,13 +1,19 @@
 <?php
-
-require 'config1.php';
+require 'config.php';
 
 // Obter o ID do medicamento
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Buscar informações do medicamento
-$sql = "SELECT * FROM medicamentos WHERE id = $id";
-$medicamento = $conn->query($sql)->fetch_assoc();
+$sql = "SELECT * FROM medicamentos WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->execute([$id]);
+$medicamento = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Verificar se o medicamento foi encontrado
+if (!$medicamento) {
+    die("Medicamento não encontrado.");
+}
 
 // Verificar se o formulário foi enviado para atualizar
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -39,12 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':id', $id);
 
     if ($stmt->execute()) {
-        header("Location: listar4.2.php");
+        header("Location: listar1.php");
+        exit; // Adiciona exit após header para evitar execução adicional
     } else {
         echo "Erro ao atualizar: " . $stmt->errorInfo()[2];
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -62,27 +68,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome:</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $medicamento['nome']; ?>">
+                <input type="text" class="form-control" id="nome" name="nome" value="<?php echo htmlspecialchars($medicamento['nome']); ?>" required>
             </div>
             <div class="mb-3">
                 <label for="preco_custo" class="form-label">Preço de Custo:</label>
-                <input type="number" class="form-control" id="preco_custo" name="preco_custo" value="<?php echo $medicamento['preco_custo']; ?>">
+                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" value="<?php echo htmlspecialchars($medicamento['preco_custo']); ?>" required>
             </div>
             <div class="mb-3">
                 <label for="preco_venda" class="form-label">Preço de Venda:</label>
-                <input type="number" class="form-control" id="preco_venda" name="preco_venda" value="<?php echo $medicamento['preco_venda']; ?>">
+                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" value="<?php echo htmlspecialchars($medicamento['preco_venda']); ?>" required>
             </div>
             <div class="mb-3">
                 <label for="quantidade" class="form-label">Quantidade:</label>
-                <input type="number" class="form-control" id="quantidade" name="quantidade" value="<?php echo $medicamento['quantidade']; ?>">
+                <input type="number" class="form-control" id="quantidade" name="quantidade" value="<?php echo htmlspecialchars($medicamento['quantidade']); ?>" required>
             </div>
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria:</label>
-                <input type="text" class="form-control" id="categoria" name="categoria" value="<?php echo $medicamento['categoria']; ?>">
+                <select class="form-select" id="categoria" name="categoria" required>
+                    <option value="<?php echo htmlspecialchars($medicamento['categoria']); ?>"><?php echo htmlspecialchars($medicamento['categoria']); ?></option>
+                    <!-- Adicione as opções de categoria aqui -->
+                </select>
             </div>
             <div class="mb-3">
                 <label for="data_validade" class="form-label">Data de Validade:</label>
-                <input type="date" class="form-control" id="data_validade" name="data_validade" value="<?php echo $medicamento['data_validade']; ?>">
+                <input type="date" class="form-control" id="data_validade" name="data_validade" value="<?php echo htmlspecialchars($medicamento['data_validade']); ?>" required>
             </div>
             <button type="submit" class="btn btn-primary">Atualizar</button>
         </form>
