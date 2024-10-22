@@ -1,3 +1,71 @@
+
+<?php
+
+function conectarBanco() {
+    $host = 'localhost';
+    $db = 'farmacia'; 
+    $user = 'root'; 
+    $pass = 'cimatec'; 
+
+    try {
+        $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $conn;
+    } catch (PDOException $e) {
+        echo "Erro na conexão: " . $e->getMessage();
+        exit;
+    }
+}
+
+
+
+
+
+
+// CADASTRAR MEDicamentos
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['cadastrar'])) {
+    $nome = $_POST['nome'];
+    $preco = $_POST['preco'];
+    $quantidade = $_POST['quantidade'];
+    $categoria = $_POST['categoria'];
+    $validade = $_POST['validade'];
+
+    $conn = conectarBanco();
+    $sql = "INSERT INTO medicamentos (nome, preco, quantidade, categoria, validade) VALUES (:nome, :preco, :quantidade, :categoria, :validade)";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':preco', $preco);
+    $stmt->bindParam(':quantidade', $quantidade);
+    $stmt->bindParam(':categoria', $categoria);
+    $stmt->bindParam(':validade', $validade);
+    
+    try {
+        $stmt->execute();
+        echo "<div class='alert alert-success'>Medicamento cadastrado com sucesso!</div>";
+    } catch (PDOException $e) {
+        echo "<div class='alert alert-danger'>Erro ao cadastrar medicamento: " . $e->getMessage() . "</div>";
+    }
+}
+
+
+
+//TABELA MEDICAMENTO/LISTAGEM
+function listarMedicamentos() {
+    $conn = conectarBanco();
+    $sql = "SELECT * FROM medicamentos ORDER BY nome ASC"; 
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$medicamentos = listarMedicamentos();
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -14,7 +82,7 @@
         <?php if(isset($erro)): ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($erro); ?></div>
         <?php endif; ?>
-        <form action="inserindo8.php" method="POST">
+        <form action="listar1.php" method="POST">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome do Medicamento</label>
                 <input type="text" class="form-control" id="nome" name="nome" required>
