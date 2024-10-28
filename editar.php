@@ -1,19 +1,13 @@
 <?php
+
 require 'config.php';
 
 // Obter o ID do medicamento
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 // Buscar informações do medicamento
-$sql = "SELECT * FROM medicamentos WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->execute([$id]);
-$medicamento = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Verificar se o medicamento foi encontrado
-if (!$medicamento) {
-    die("Medicamento não encontrado.");
-}
+$sql = "SELECT * FROM medicamentos WHERE id = $id";
+$medicamento = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
 
 // Verificar se o formulário foi enviado para atualizar
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -35,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 data_validade = :data_validade 
             WHERE id = :id";
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':preco_custo', $preco_custo);
     $stmt->bindParam(':preco_venda', $preco_venda);
@@ -46,11 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         header("Location: listar1.php");
-        exit; // Adiciona exit após header para evitar execução adicional
     } else {
-        echo "Erro ao atualizar: " . $stmt->errorInfo()[2];
+        echo "Erro ao atualizar: " . implode(", ", $stmt->errorInfo());
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -68,30 +62,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome:</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="<?php echo htmlspecialchars($medicamento['nome']); ?>" required>
+                <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $medicamento['nome']; ?>">
             </div>
             <div class="mb-3">
                 <label for="preco_custo" class="form-label">Preço de Custo:</label>
-                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" value="<?php echo htmlspecialchars($medicamento['preco_custo']); ?>" required>
+                <input type="number" class="form-control" id="preco_custo" name="preco_custo" value="<?php echo $medicamento['preco_custo']; ?>">
             </div>
             <div class="mb-3">
                 <label for="preco_venda" class="form-label">Preço de Venda:</label>
-                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" value="<?php echo htmlspecialchars($medicamento['preco_venda']); ?>" required>
+                <input type="number" class="form-control" id="preco_venda" name="preco_venda" value="<?php echo $medicamento['preco_venda']; ?>">
             </div>
             <div class="mb-3">
                 <label for="quantidade" class="form-label">Quantidade:</label>
-                <input type="number" class="form-control" id="quantidade" name="quantidade" value="<?php echo htmlspecialchars($medicamento['quantidade']); ?>" required>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" value="<?php echo $medicamento['quantidade']; ?>">
             </div>
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria:</label>
-                <select class="form-select" id="categoria" name="categoria" required>
-                    <option value="<?php echo htmlspecialchars($medicamento['categoria']); ?>"><?php echo htmlspecialchars($medicamento['categoria']); ?></option>
-                    <!-- Adicione as opções de categoria aqui -->
-                </select>
+                <input type="text" class="form-control" id="categoria" name="categoria" value="<?php echo $medicamento['categoria']; ?>">
             </div>
             <div class="mb-3">
                 <label for="data_validade" class="form-label">Data de Validade:</label>
-                <input type="date" class="form-control" id="data_validade" name="data_validade" value="<?php echo htmlspecialchars($medicamento['data_validade']); ?>" required>
+                <input type="date" class="form-control" id="data_validade" name="data_validade" value="<?php echo $medicamento['data_validade']; ?>">
             </div>
             <button type="submit" class="btn btn-primary">Atualizar</button>
         </form>

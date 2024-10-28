@@ -1,71 +1,3 @@
-
-<?php
-
-function conectarBanco() {
-    $host = 'localhost';
-    $db = 'farmacia'; 
-    $user = 'root'; 
-    $pass = 'cimatec'; 
-
-    try {
-        $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $conn;
-    } catch (PDOException $e) {
-        echo "Erro na conexão: " . $e->getMessage();
-        exit;
-    }
-}
-
-
-
-
-
-
-// CADASTRAR MEDicamentos
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['cadastrar'])) {
-    $nome = $_POST['nome'];
-    $preco = $_POST['preco'];
-    $quantidade = $_POST['quantidade'];
-    $categoria = $_POST['categoria'];
-    $validade = $_POST['validade'];
-
-    $conn = conectarBanco();
-    $sql = "INSERT INTO medicamentos (nome, preco, quantidade, categoria, validade) VALUES (:nome, :preco, :quantidade, :categoria, :validade)";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':nome', $nome);
-    $stmt->bindParam(':preco', $preco);
-    $stmt->bindParam(':quantidade', $quantidade);
-    $stmt->bindParam(':categoria', $categoria);
-    $stmt->bindParam(':validade', $validade);
-    
-    try {
-        $stmt->execute();
-        echo "<div class='alert alert-success'>Medicamento cadastrado com sucesso!</div>";
-    } catch (PDOException $e) {
-        echo "<div class='alert alert-danger'>Erro ao cadastrar medicamento: " . $e->getMessage() . "</div>";
-    }
-}
-
-
-
-//TABELA MEDICAMENTO/LISTAGEM
-function listarMedicamentos() {
-    $conn = conectarBanco();
-    $sql = "SELECT * FROM medicamentos ORDER BY nome ASC"; 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-$medicamentos = listarMedicamentos();
-?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -77,19 +9,19 @@ $medicamentos = listarMedicamentos();
     <div class="container mt-5">
         <h2>Cadastrar Medicamento</h2>
         <?php if(isset($sucesso)): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($sucesso); ?></div>
+            <div class="alert alert-success"><?php echo $sucesso; ?></div>
         <?php endif; ?>
         <?php if(isset($erro)): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($erro); ?></div>
+            <div class="alert alert-danger"><?php echo $erro; ?></div>
         <?php endif; ?>
-        <form action="listar1.php" method="POST">
+        <form  action="listar1.php" method="POST">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome do Medicamento</label>
                 <input type="text" class="form-control" id="nome" name="nome" required>
             </div>
             <div class="mb-3">
                 <label for="preco_custo" class="form-label">Preço de Custo</label>
-                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" required>
+                <input type="number" step="" class="form-control" id="preco_custo" name="preco_custo" required>
             </div>
             <div class="mb-3">
                 <label for="preco_venda" class="form-label">Preço de Venda</label>
@@ -116,7 +48,10 @@ $medicamentos = listarMedicamentos();
                     <option value="Dermatologicos">Dermatologicos</option>
                     <option value="Primeiros Socorros">Primeiros Socorros</option>                    
                     <option value="Vitaminas e Suplementos">Vitaminas e Suplementos</option>
-                </select>
+                    
+                    
+
+                 </select>
             </div>
             <div class="mb-3">
                 <label for="data_validade" class="form-label">Data de Validade</label>
@@ -124,7 +59,7 @@ $medicamentos = listarMedicamentos();
             </div>
             <button type="submit" class="btn btn-success">Cadastrar</button>
             <a href="listar1.php" class="btn btn-primary">Ver Medicamentos</a><br><br><br>
-            <a href="menu.php" class="btn btn-secondary active" role="button">Ir para o menu</a><br><br>
+            <a href="menu.php" class="btn btn-default btn-lg active" role="button">Ir para o menu</a><br><br>
         </form>
     </div>
 </body>

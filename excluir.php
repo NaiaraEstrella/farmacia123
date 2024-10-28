@@ -1,22 +1,22 @@
 <?php
-require 'config.php';
+require 'config.php'; 
 
-// Obter o ID do medicamento de forma segura
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+// Verifica se o ID foi enviado
+if (isset($_POST['id'])) {
+    $id = intval($_POST['id']);
 
-// Verificar se o ID é válido
-if ($id > 0) {
-    // Deletar o medicamento usando uma consulta preparada
-    $sql = "DELETE FROM medicamentos WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    
-    if ($stmt->execute([$id])) {
+    // Prepara a consulta para excluir
+    $sql = "DELETE FROM medicamentos WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id);
+
+    if ($stmt->execute()) {
         header("Location: listar1.php");
-        exit; // Adiciona exit após header para evitar execução adicional
+        exit; // Adicione exit após header para garantir que o script pare
     } else {
-        echo "Erro ao deletar: " . htmlspecialchars($stmt->errorInfo()[2]);
+        echo "Erro ao excluir: " . implode(", ", $stmt->errorInfo());
     }
 } else {
-    echo "ID inválido.";
+    echo "ID não fornecido.";
 }
 ?>

@@ -3,12 +3,7 @@ require 'config.php';
 
 // Buscar informações do medicamento
 $sql = "SELECT * FROM medicamentos";
-try {
-    $listaMedicamentos = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Erro ao buscar medicamentos: " . htmlspecialchars($e->getMessage());
-    exit;
-}
+$listaMedicamentos = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -35,27 +30,21 @@ try {
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($listaMedicamentos)): ?>
+                <?php foreach ($listaMedicamentos as $med): ?>
                     <tr>
-                        <td colspan="6" class="text-center">Nenhum medicamento encontrado.</td>
+                        <td><?php echo htmlspecialchars($med['nome']); ?></td>
+                        <td><?php echo htmlspecialchars($med['preco_custo']); ?></td>
+                        <td><?php echo htmlspecialchars($med['preco_venda']); ?></td>
+                        <td><?php echo htmlspecialchars($med['quantidade']); ?></td>
+                        <td><?php echo htmlspecialchars($med['categoria']); ?></td>
+                        <td><?php echo htmlspecialchars($med['data_validade']); ?></td>
                     </tr>
-                <?php else: ?>
-                    <?php foreach ($listaMedicamentos as $med): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($med['nome']); ?></td>
-                            <td><?php echo htmlspecialchars(number_format($med['preco_custo'], 2, ',', '.')); ?></td>
-                            <td><?php echo htmlspecialchars(number_format($med['preco_venda'], 2, ',', '.')); ?></td>
-                            <td><?php echo htmlspecialchars($med['quantidade']); ?></td>
-                            <td><?php echo htmlspecialchars($med['categoria']); ?></td>
-                            <td><?php echo htmlspecialchars($med['data_validade']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
 
         <!-- Botão para voltar ao menu -->
-        <a href="menu.php" class="btn btn-secondary btn-lg active" role="button">Ir para o menu</a><br><br>
+        <a href="menu.php" class="btn btn-default btn-lg active" role="button">Ir para o menu</a><br><br>
     </div>
 </body>
 </html>
