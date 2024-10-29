@@ -75,11 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <form action="excluir.php" method="POST" style="display:inline;">
                                 <input type="hidden" name="id" value="<?php echo $med['id']; ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Excluir</button><br><br><br>
-                                <a href="menu.php" class="btn btn-default btn-lg active" role="button">Ir para o menu</a><br><br>
+                                
                             </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <a href="menu.php" class="btn btn-default btn-lg active" role="button">Ir para o menu</a><br><br>
             </tbody>
         </table>
     </div>
